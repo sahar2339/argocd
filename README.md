@@ -1,5 +1,6 @@
 # Introduction
 
+לסיים את האפליקישן סט, חוקי פיירוול לאינגרס, לעשות פרוגקט בשביל הרשאות לאפליקציה
   
 
   
@@ -354,6 +355,7 @@ If you want the ArgoCD to manage and deploy to another cluster, you need to conn
 		$ argocd cluster list
 
 
+## Multi cluster applications with ApplicationSets
 
 
   
@@ -443,6 +445,38 @@ For example  `repo-manager` role grants the user access to get, create and updat
 	    $ kubectl apply -f argcd-rbac.yml
 
 ### Secure the UI ingress
+
+When the ArgoCD ingress is first created by the operator, anyone can access it from anywhere.
+To provide additional security for the ingress, some firewall rules can be added to make sure only you or your team can access it.
+
+1. First get the ArgoCD `ingress` and save it to `ingress.yaml`
+	
+	   $ kubectl get ingress argocd-server -o yaml > ingress.yaml  
+	   
+2. Edit `ingress.yaml` and add the following line under `annotations`, make sure to replace `<some IP>` with the IPs you want to manage ArgoCD from.
+You can find your computer IP from sites like <https://whatismyipaddress.com>.
+ 
+
+	   nginx.ingress.kubernetes.io/whitelist-source-range: "<some IP>, <some IP>"
+	   
+This will provide the `Nginx` whitelist of IPs it will accept requests from, any other request will be dropped.
+
+3. Apply the `ingress.yaml`
+
+	   $ kubectl  apply -f ingress.yaml
+
+For more complex scenarios you can add `server-snippet` to the  `ingress.yaml` and specify the firewall logic :
+
+	nginx.ingress.kubernetes.io/server-snippet: |
+	location / {
+	  # block one ip
+	  deny    192.0.2.0;
+	  # allow anyone in 198.51.100.0/24;
+	  allow   198.51.100.0/24;
+	  # drop rest of the world 
+	  deny    all;
+	}
+
 
 
 
