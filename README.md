@@ -38,7 +38,7 @@ The ArgoCD Operator provides:
 
 Before you begin, you should:
 
-* Deploy one or more Vultr Kubernetes Cluster with at least 3 nodes.
+* Deploy one or more Kubernetes Cluster with at least 3 nodes.
 
 * Have cluster-admin privileges.
 
@@ -132,7 +132,7 @@ Create an ArgoCD manifest file `argocd.yaml` with the following content:
 
        $ kubectl apply -f <https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.1/deploy/static/provider/cloud/deploy.yaml>
 
-4. Visit the [Vultr Load Balancers dashboard](https://my.vultr.com/loadbalancers) and get the IP Address of the Load Balancer.
+4. Visit the Load Balancers dashboard and get the IP Address of the Load Balancer.
 
 5. Create a `DNS` record in your domain that points to the IP of the Load Balancer.
 
